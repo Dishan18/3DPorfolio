@@ -144,22 +144,23 @@ const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
   const [enableAO, setEnableAO] = useState(true);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 900);
+  const [isLowEndMobile, setIsLowEndMobile] = useState(false);
 
   useEffect(() => {
     const setPerformanceMode = () => {
       const nav = navigator as Navigator & { deviceMemory?: number };
       const lowCores = (navigator.hardwareConcurrency || 8) <= 4;
       const lowMemory = (nav.deviceMemory || 8) <= 4;
+      const isLowEndDevice = lowCores || lowMemory;
       const narrowViewport = window.innerWidth < 1200;
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
 
       setIsMobileView(window.innerWidth <= 900);
+      setIsLowEndMobile(window.innerWidth <= 900 && isLowEndDevice);
 
-      setEnableAO(
-        !(lowCores || lowMemory || narrowViewport || prefersReducedMotion),
-      );
+      setEnableAO(!(isLowEndDevice || narrowViewport || prefersReducedMotion));
     };
 
     setPerformanceMode();
@@ -195,7 +196,13 @@ const TechStack = () => {
   }, []);
 
   const spheres = useMemo(() => {
-    const sphereCount = isMobileView ? 8 : enableAO ? 16 : 10;
+    const sphereCount = isMobileView
+      ? isLowEndMobile
+        ? 10
+        : 12
+      : enableAO
+        ? 16
+        : 10;
     const desktopScales = [0.7, 1, 0.8, 1, 1];
     const mobileScales = [0.45, 0.55, 0.6, 0.65, 0.7];
     const scales = isMobileView ? mobileScales : desktopScales;
@@ -204,28 +211,45 @@ const TechStack = () => {
       scale: scales[Math.floor(Math.random() * scales.length)],
       materialIndex: Math.floor(Math.random() * textures.length),
     }));
-  }, [enableAO, isMobileView]);
+  }, [enableAO, isLowEndMobile, isMobileView]);
 
   const materials = useMemo(() => {
+    const useEmissiveMap = enableAO || (isMobileView && !isLowEndMobile);
+    const emissiveIntensity = isMobileView
+      ? isLowEndMobile
+        ? 0.14
+        : 0.2
+      : enableAO
+        ? 0.25
+        : 0.08;
+
     return textures.map(
       (texture) =>
         new THREE.MeshStandardMaterial({
           map: texture,
           emissive: "#ffffff",
-          emissiveMap: enableAO ? texture : null,
-          emissiveIntensity: enableAO ? 0.25 : 0.08,
+          emissiveMap: useEmissiveMap ? texture : null,
+          emissiveIntensity,
           metalness: enableAO ? 0.35 : 0.15,
           roughness: enableAO ? 0.9 : 1,
         }),
     );
-  }, [enableAO]);
+  }, [enableAO, isLowEndMobile, isMobileView]);
 
   return (
     <div className="techstack">
       <h2> My Techstack</h2>
 
       <Canvas
-        dpr={enableAO ? [1, 1.5] : [1, 1.25]}
+        dpr={
+          isMobileView
+            ? isLowEndMobile
+              ? [1, 1.1]
+              : [1, 1.2]
+            : enableAO
+              ? [1, 1.5]
+              : [1, 1.25]
+        }
         gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
         camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
         onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
@@ -239,7 +263,12 @@ const TechStack = () => {
           color="white"
         />
         <directionalLight position={[0, 5, -4]} intensity={2} />
-        <Physics gravity={[0, 0, 0]} timeStep={enableAO ? "vary" : 1 / 45}>
+        <Physics
+          gravity={[0, 0, 0]}
+          timeStep={
+            isMobileView && isLowEndMobile ? 1 / 40 : enableAO ? "vary" : 1 / 45
+          }
+        >
           <Pointer isActive={isActive} />
           {spheres.map((props, i) => (
             <SphereGeo

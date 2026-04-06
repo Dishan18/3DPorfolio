@@ -84,6 +84,9 @@
   opacity: 0;
   animation: whatFlicker 0.5s 1 forwards;
   animation-delay: 1s;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 @keyframes whatFlicker {
   0%,
@@ -207,6 +210,16 @@
 .what-content-in {
   height: 100%;
   overflow: hidden;
+}
+.what-scroll-area {
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.what-scroll-area::-webkit-scrollbar {
+  display: none;
 }
 .what-content-in h5 {
   font-weight: 300;

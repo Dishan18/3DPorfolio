@@ -98,11 +98,24 @@ const WhatIDo = () => {
             <div className="what-content-in">
               <h3>WEB DEVELOPMENT</h3>
               <h4>Building Full-Stack Products</h4>
-              <p>
-                I build responsive, production-ready web applications with
-                modern frontend and backend stacks, focusing on reliability,
-                performance, and clean user experience.
-              </p>
+              <div className="what-scroll-area">
+                <p>
+                  I build responsive, production-ready web applications with
+                  modern frontend and backend stacks, focusing on reliability,
+                  performance, and clean user experience.
+                </p>
+                <h5>TECH STACK</h5>
+                <div className="what-content-flex">
+                  <div className="what-tags">React</div>
+                  <div className="what-tags">TypeScript</div>
+                  <div className="what-tags">Next.js</div>
+                  <div className="what-tags">Node.js</div>
+                  <div className="what-tags">Express</div>
+                  <div className="what-tags">MongoDB</div>
+                  <div className="what-tags">PostgreSQL</div>
+                  <div className="what-tags">Docker</div>
+                </div>
+              </div>
               <div className="what-arrow"></div>
             </div>
           </div>
@@ -127,10 +140,24 @@ const WhatIDo = () => {
             <div className="what-content-in">
               <h3>MACHINE LEARNING</h3>
               <h4>Applied AI &amp; Predictive Modeling</h4>
-              <p>
-                I work on model-driven solutions using deep learning, data
-                analysis, and NLP workflows for practical, measurable outcomes.
-              </p>
+              <div className="what-scroll-area">
+                <p>
+                  I work on model-driven solutions using deep learning, data
+                  analysis, and NLP workflows for practical, measurable
+                  outcomes.
+                </p>
+                <h5>TECH STACK</h5>
+                <div className="what-content-flex">
+                  <div className="what-tags">Python</div>
+                  <div className="what-tags">PyTorch</div>
+                  <div className="what-tags">TensorFlow</div>
+                  <div className="what-tags">Scikit-learn</div>
+                  <div className="what-tags">Pandas</div>
+                  <div className="what-tags">NumPy</div>
+                  <div className="what-tags">OpenCV</div>
+                  <div className="what-tags">Hugging Face</div>
+                </div>
+              </div>
               <div className="what-arrow"></div>
             </div>
           </div>
