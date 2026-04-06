@@ -143,6 +143,7 @@ function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
 const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
   const [enableAO, setEnableAO] = useState(true);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 900);
 
   useEffect(() => {
     const setPerformanceMode = () => {
@@ -153,6 +154,8 @@ const TechStack = () => {
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
+
+      setIsMobileView(window.innerWidth <= 900);
 
       setEnableAO(
         !(lowCores || lowMemory || narrowViewport || prefersReducedMotion),
@@ -192,12 +195,16 @@ const TechStack = () => {
   }, []);
 
   const spheres = useMemo(() => {
-    const sphereCount = enableAO ? 16 : 8;
+    const sphereCount = isMobileView ? 8 : enableAO ? 16 : 10;
+    const desktopScales = [0.7, 1, 0.8, 1, 1];
+    const mobileScales = [0.45, 0.55, 0.6, 0.65, 0.7];
+    const scales = isMobileView ? mobileScales : desktopScales;
+
     return [...Array(sphereCount)].map(() => ({
-      scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+      scale: scales[Math.floor(Math.random() * scales.length)],
       materialIndex: Math.floor(Math.random() * textures.length),
     }));
-  }, [enableAO]);
+  }, [enableAO, isMobileView]);
 
   const materials = useMemo(() => {
     return textures.map(

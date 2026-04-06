@@ -40,11 +40,6 @@ const MainContainer = ({ children }: PropsWithChildren) => {
   }, [isDesktopView]);
 
   useEffect(() => {
-    if (!isDesktopView) {
-      setShouldRenderTechStack(false);
-      return;
-    }
-
     if (!techStackTriggerRef.current) return;
 
     const observer = new IntersectionObserver(
@@ -54,7 +49,11 @@ const MainContainer = ({ children }: PropsWithChildren) => {
           observer.disconnect();
         }
       },
-      { root: null, rootMargin: "320px 0px", threshold: 0.01 },
+      {
+        root: null,
+        rootMargin: isDesktopView ? "320px 0px" : "140px 0px",
+        threshold: 0.01,
+      },
     );
 
     observer.observe(techStackTriggerRef.current);
@@ -79,19 +78,15 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <Skills />
             <Career />
             <Work />
-            {isDesktopView && (
-              <div ref={techStackTriggerRef}>
-                {shouldRenderTechStack ? (
-                  <Suspense
-                    fallback={<div className="techstack-placeholder" />}
-                  >
-                    <TechStack />
-                  </Suspense>
-                ) : (
-                  <div className="techstack-placeholder" />
-                )}
-              </div>
-            )}
+            <div ref={techStackTriggerRef}>
+              {shouldRenderTechStack ? (
+                <Suspense fallback={<div className="techstack-placeholder" />}>
+                  <TechStack />
+                </Suspense>
+              ) : (
+                <div className="techstack-placeholder" />
+              )}
+            </div>
             <Contact />
           </div>
         </div>
