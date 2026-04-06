@@ -84,6 +84,14 @@ const projects = [
     image: "/images/pro10.png",
     link: "https://github.com/Dishan18/Olympic-Data-Cleaning",
   },
+  {
+    title: "Typique",
+    category: "Creative Writing Application, Interactive UI/UX System",
+    tools:
+      "React, TypeScript, Vite, Tailwind CSS, Framer Motion, Custom Input Handling, State Management, Multi-page Document Engine, PDF Export, WhatsApp API (wa.me), Local Storage Persistence",
+    image: "/images/pro11.png",
+    link: "https://github.com/Dishan18/Typique",
+  },
 ];
 
 const Work = () => {
