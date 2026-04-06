@@ -1,5 +1,9 @@
 {
   "name": "dishan-portfolio",
+  "description": "3D portfolio website for Dishan Sarkar built with React, TypeScript, Three.js, and GSAP.",
+  "author": "Dishan Sarkar",
+  "homepage": "https://dishansarkar.vercel.app/",
+  "license": "MIT",
   "private": true,
   "version": "0.0.0",
   "type": "module",

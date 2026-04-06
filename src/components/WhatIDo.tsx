@@ -116,7 +116,6 @@ const WhatIDo = () => {
                   <div className="what-tags">Docker</div>
                 </div>
               </div>
-              <div className="what-arrow"></div>
             </div>
           </div>
           <div
@@ -158,7 +157,6 @@ const WhatIDo = () => {
                   <div className="what-tags">Hugging Face</div>
                 </div>
               </div>
-              <div className="what-arrow"></div>
             </div>
           </div>
         </div>

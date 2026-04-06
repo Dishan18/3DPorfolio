@@ -95,30 +95,52 @@ const projects = [
 ];
 
 const Work = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isTransitionEnabled, setIsTransitionEnabled] = useState(true);
+
+  const slides = [projects[projects.length - 1], ...projects, projects[0]];
+
+  const activeProjectIndex =
+    currentIndex === 0
+      ? projects.length - 1
+      : currentIndex === projects.length + 1
+        ? 0
+        : currentIndex - 1;
 
   const goToSlide = useCallback(
     (index: number) => {
       if (isAnimating) return;
       setIsAnimating(true);
+      setIsTransitionEnabled(true);
       setCurrentIndex(index);
-      setTimeout(() => setIsAnimating(false), 500);
     },
     [isAnimating],
   );
 
   const goToPrev = useCallback(() => {
-    const newIndex =
-      currentIndex === 0 ? projects.length - 1 : currentIndex - 1;
-    goToSlide(newIndex);
+    goToSlide(currentIndex - 1);
   }, [currentIndex, goToSlide]);
 
   const goToNext = useCallback(() => {
-    const newIndex =
-      currentIndex === projects.length - 1 ? 0 : currentIndex + 1;
-    goToSlide(newIndex);
+    goToSlide(currentIndex + 1);
   }, [currentIndex, goToSlide]);
+
+  const handleTransitionEnd = useCallback(() => {
+    setIsAnimating(false);
+
+    if (currentIndex === 0) {
+      setIsTransitionEnabled(false);
+      setCurrentIndex(projects.length);
+      return;
+    }
+
+    if (currentIndex === projects.length + 1) {
+      setIsTransitionEnabled(false);
+      setCurrentIndex(1);
+      return;
+    }
+  }, [currentIndex]);
 
   return (
     <div className="work-section" id="projects">
@@ -150,36 +172,53 @@ const Work = () => {
           <div className="carousel-track-container">
             <div
               className="carousel-track"
+              onTransitionEnd={handleTransitionEnd}
               style={{
                 transform: `translateX(-${currentIndex * 100}%)`,
+                transition: isTransitionEnabled
+                  ? "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)"
+                  : "none",
               }}
             >
-              {projects.map((project, index) => (
-                <div className="carousel-slide" key={index}>
-                  <div className="carousel-content">
-                    <div className="carousel-info">
-                      <div className="carousel-number">
-                        <h3>{String(index + 1).padStart(2, "0")}</h3>
-                      </div>
-                      <div className="carousel-details">
-                        <h4>{project.title}</h4>
-                        <p className="carousel-category">{project.category}</p>
-                        <div className="carousel-tools">
-                          <span className="tools-label">Tools & Features</span>
-                          <p>{project.tools}</p>
+              {slides.map((project, index) => {
+                const projectNumber =
+                  index === 0
+                    ? projects.length
+                    : index === slides.length - 1
+                      ? 1
+                      : index;
+
+                return (
+                  <div className="carousel-slide" key={index}>
+                    <div className="carousel-content">
+                      <div className="carousel-info">
+                        <div className="carousel-number">
+                          <h3>{String(projectNumber).padStart(2, "0")}</h3>
+                        </div>
+                        <div className="carousel-details">
+                          <h4>{project.title}</h4>
+                          <p className="carousel-category">
+                            {project.category}
+                          </p>
+                          <div className="carousel-tools">
+                            <span className="tools-label">
+                              Tools & Features
+                            </span>
+                            <p>{project.tools}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="carousel-image-wrapper">
-                      <WorkImage
-                        image={project.image}
-                        alt={project.title}
-                        link={project.link}
-                      />
+                      <div className="carousel-image-wrapper">
+                        <WorkImage
+                          image={project.image}
+                          alt={project.title}
+                          link={project.link}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -189,9 +228,9 @@ const Work = () => {
               <button
                 key={index}
                 className={`carousel-dot ${
-                  index === currentIndex ? "carousel-dot-active" : ""
+                  index === activeProjectIndex ? "carousel-dot-active" : ""
                 }`}
-                onClick={() => goToSlide(index)}
+                onClick={() => goToSlide(index + 1)}
                 aria-label={`Go to project ${index + 1}`}
                 data-cursor="disable"
               />

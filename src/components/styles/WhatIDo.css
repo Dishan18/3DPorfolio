@@ -87,6 +87,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 }
 @keyframes whatFlicker {
   0%,
@@ -145,30 +146,6 @@
   border-left: none;
   border-top: none;
 }
-.what-arrow {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 25px;
-  height: 25px;
-  border: 1px solid #fff;
-}
-.what-arrow::before {
-  content: "";
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  transition: 0.5s;
-  width: 10px;
-  height: 10px;
-}
-.what-noTouch:hover .what-arrow::before,
-.what-content-active .what-arrow::before {
-  transform: translate(-50%, -20%) rotate(-225deg);
-}
 .what-border1 {
   position: absolute;
   top: 0;
@@ -212,6 +189,7 @@
   overflow: hidden;
 }
 .what-scroll-area {
+  flex: 1;
   min-height: 0;
   overflow-y: auto;
   padding-right: 4px;
