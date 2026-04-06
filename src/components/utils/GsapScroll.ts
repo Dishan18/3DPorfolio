@@ -3,7 +3,7 @@ import gsap from "gsap";
 
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
-  camera: THREE.PerspectiveCamera
+  camera: THREE.PerspectiveCamera,
 ) {
   let intensity: number = 0;
   setInterval(() => {
@@ -36,31 +36,48 @@ export function setCharTimeline(
       invalidateOnRefresh: true,
     },
   });
-  let screenLight: any, monitor: any;
-  character?.children.forEach((object: any) => {
+  character?.children.forEach((object: THREE.Object3D) => {
     if (object.name === "Plane004") {
-      object.children.forEach((child: any) => {
-        child.material.transparent = true;
-        child.material.opacity = 0;
-        if (child.material.name === "Material.018") {
-          monitor = child;
-          child.material.color.set("#FFFFFF");
+      object.children.forEach((child: THREE.Object3D) => {
+        if (child instanceof THREE.Mesh && !Array.isArray(child.material)) {
+          const material = child.material as THREE.MeshStandardMaterial;
+          material.transparent = true;
+          material.opacity = 0;
+          if (material.name === "Material.018") {
+            material.color.set("#FFFFFF");
+          }
         }
       });
     }
-    if (object.name === "screenlight") {
-      object.material.transparent = true;
-      object.material.opacity = 0;
-      object.material.emissive.set("#B0F5EA");
-      gsap.timeline({ repeat: -1, repeatRefresh: true }).to(object.material, {
+    if (
+      object.name === "screenlight" &&
+      object instanceof THREE.Mesh &&
+      !Array.isArray(object.material)
+    ) {
+      const material = object.material as THREE.MeshStandardMaterial;
+      material.transparent = true;
+      material.opacity = 0;
+      material.emissive.set("#B0F5EA");
+      gsap.timeline({ repeat: -1, repeatRefresh: true }).to(material, {
         emissiveIntensity: () => intensity * 8,
         duration: () => Math.random() * 0.6,
         delay: () => Math.random() * 0.1,
       });
-      screenLight = object;
     }
   });
-  let neckBone = character?.getObjectByName("spine005");
+  const monitorMesh = character
+    ?.getObjectByName("Plane004")
+    ?.children.find(
+      (child) =>
+        child instanceof THREE.Mesh &&
+        !Array.isArray(child.material) &&
+        child.material.name === "Material.018",
+    ) as
+    | THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial>
+    | undefined;
+
+  const screenLightMesh = character?.getObjectByName("screenlight");
+  const neckBone = character?.getObjectByName("spine005");
   if (window.innerWidth > 1024) {
     if (character) {
       tl1
@@ -75,7 +92,7 @@ export function setCharTimeline(
         .to(
           camera.position,
           { z: 75, y: 8.4, duration: 6, delay: 2, ease: "power3.inOut" },
-          0
+          0,
         )
         .to(".about-section", { y: "30%", duration: 6 }, 0)
         .to(".about-section", { opacity: 0, delay: 3, duration: 2 }, 0)
@@ -83,37 +100,60 @@ export function setCharTimeline(
           ".character-model",
           { pointerEvents: "inherit" },
           { pointerEvents: "none", x: "-12%", delay: 2, duration: 5 },
-          0
+          0,
         )
         .to(character.rotation, { y: 0.92, x: 0.12, delay: 3, duration: 3 }, 0)
         .to(neckBone!.rotation, { x: 0.6, delay: 2, duration: 3 }, 0)
-        .to(monitor.material, { opacity: 1, duration: 0.8, delay: 3.2 }, 0)
-        .to(screenLight.material, { opacity: 1, duration: 0.8, delay: 4.5 }, 0)
         .fromTo(
           ".what-box-in",
           { display: "none" },
           { display: "flex", duration: 0.1, delay: 6 },
-          0
-        )
-        .fromTo(
-          monitor.position,
-          { y: -10, z: 2 },
-          { y: 0, z: 0, delay: 1.5, duration: 3 },
-          0
+          0,
         )
         .fromTo(
           ".character-rim",
           { opacity: 1, scaleX: 1.4 },
           { opacity: 0, scale: 0, y: "-70%", duration: 5, delay: 2 },
-          0.3
+          0.3,
         );
+
+      if (
+        monitorMesh &&
+        monitorMesh instanceof THREE.Mesh &&
+        !Array.isArray(monitorMesh.material)
+      ) {
+        tl2
+          .to(
+            monitorMesh.material,
+            { opacity: 1, duration: 0.8, delay: 3.2 },
+            0,
+          )
+          .fromTo(
+            monitorMesh.position,
+            { y: -10, z: 2 },
+            { y: 0, z: 0, delay: 1.5, duration: 3 },
+            0,
+          );
+      }
+
+      if (
+        screenLightMesh &&
+        screenLightMesh instanceof THREE.Mesh &&
+        !Array.isArray(screenLightMesh.material)
+      ) {
+        tl2.to(
+          screenLightMesh.material,
+          { opacity: 1, duration: 0.8, delay: 4.5 },
+          0,
+        );
+      }
 
       tl3
         .fromTo(
           ".character-model",
           { y: "0%" },
           { y: "-100%", duration: 4, ease: "none", delay: 1 },
-          0
+          0,
         )
         .fromTo(".whatIDO", { y: 0 }, { y: "15%", duration: 2 }, 0)
         .to(character.rotation, { x: -0.04, duration: 2, delay: 1 }, 0);
@@ -147,20 +187,20 @@ export function setAllTimeline() {
       ".career-timeline",
       { maxHeight: "10%" },
       { maxHeight: "100%", duration: 0.5 },
-      0
+      0,
     )
 
     .fromTo(
       ".career-timeline",
       { opacity: 0 },
       { opacity: 1, duration: 0.1 },
-      0
+      0,
     )
     .fromTo(
       ".career-info-box",
       { opacity: 0 },
       { opacity: 1, stagger: 0.1, duration: 0.5 },
-      0
+      0,
     )
     .fromTo(
       ".career-dot",
@@ -170,7 +210,7 @@ export function setAllTimeline() {
         delay: 0.3,
         duration: 0.1,
       },
-      0
+      0,
     );
 
   if (window.innerWidth > 1024) {
@@ -178,14 +218,14 @@ export function setAllTimeline() {
       ".career-section",
       { y: 0 },
       { y: "20%", duration: 0.5, delay: 0.2 },
-      0
+      0,
     );
   } else {
     careerTimeline.fromTo(
       ".career-section",
       { y: 0 },
       { y: 0, duration: 0.5, delay: 0.2 },
-      0
+      0,
     );
   }
 }

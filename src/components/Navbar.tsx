@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
@@ -9,6 +9,26 @@ gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 export let smoother: ScrollSmoother;
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navItems = [
+    { text: "ABOUT", href: "#about" },
+    { text: "PROJECTS", href: "#projects" },
+    { text: "SKILLS", href: "#skills" },
+    { text: "CONTACT", href: "#contact" },
+  ];
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    section: string,
+  ) => {
+    if (window.innerWidth > 1024) {
+      e.preventDefault();
+      smoother.scrollTo(section, true, "top top");
+    }
+    setIsMenuOpen(false);
+  };
+
   useEffect(() => {
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
@@ -23,53 +43,59 @@ const Navbar = () => {
     smoother.scrollTop(0);
     smoother.paused(true);
 
-    let links = document.querySelectorAll(".header ul a");
-    links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
-      element.addEventListener("click", (e) => {
-        if (window.innerWidth > 1024) {
-          e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
-        }
-      });
-    });
-    window.addEventListener("resize", () => {
+    const onResize = () => {
       ScrollSmoother.refresh(true);
-    });
+      if (window.innerWidth >= 900) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
+
   return (
     <>
       <div className="header">
         <a href="/#" className="navbar-title" data-cursor="disable">
-          AM
+          DS
         </a>
         <a
-          href="https://www.linkedin.com/in/akashrmalhotra/"
+          href="mailto:dishansrkr@gmail.com"
           className="navbar-connect"
           data-cursor="disable"
           target="_blank"
           rel="noreferrer"
         >
-          linkedin.com/in/akashrmalhotra
+          dishansrkr@gmail.com
         </a>
-        <ul>
-          <li>
-            <a data-href="#about" href="#about">
-              <HoverLinks text="ABOUT" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#work" href="#work">
-              <HoverLinks text="WORK" />
-            </a>
-          </li>
-          <li>
-            <a data-href="#contact" href="#contact">
-              <HoverLinks text="CONTACT" />
-            </a>
-          </li>
+        <button
+          className={`nav-toggle ${isMenuOpen ? "nav-toggle-open" : ""}`}
+          aria-label="Toggle navigation menu"
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+          data-cursor="disable"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul className={`nav-links ${isMenuOpen ? "nav-links-open" : ""}`}>
+          {navItems.map((item) => (
+            <li key={item.text}>
+              <a
+                data-href={item.href}
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
+              >
+                <HoverLinks text={item.text} />
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
 

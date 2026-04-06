@@ -28,11 +28,17 @@
 .contact-box {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .contact-flex p {
   margin-top: 10px;
   margin-bottom: 20px;
+  overflow-wrap: anywhere;
+}
+
+.contact-box a {
+  overflow-wrap: anywhere;
 }
 
 a.contact-social {
@@ -46,7 +52,7 @@ a.contact-social {
   margin: 0;
 }
 
-.contact-box h2>span {
+.contact-box h2 > span {
   color: var(--accentColor);
 }
 
@@ -95,6 +101,10 @@ a.contact-social {
   .contact-flex {
     flex-direction: column;
     gap: 40px;
+  }
+
+  .contact-box h2 {
+    line-height: 1.4;
   }
 
   .contact-flex p {

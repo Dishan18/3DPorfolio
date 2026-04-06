@@ -113,6 +113,13 @@ body {
   margin-bottom: -100px;
 }
 
+.techstack-placeholder {
+  width: 100%;
+  height: var(--vh);
+  margin-top: 50px;
+  margin-bottom: -100px;
+}
+
 .techstack h2 {
   font-size: 80px;
   text-align: center;

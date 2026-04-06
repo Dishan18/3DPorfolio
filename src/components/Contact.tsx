@@ -11,27 +11,25 @@ const Contact = () => {
             <h4>Connect</h4>
             <p>
               <a
-                href="https://www.linkedin.com/in/akashrmalhotra/"
+                href="mailto:dishansrkr@gmail.com"
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="disable"
               >
-                LinkedIn — akashrmalhotra
+                Email: dishansrkr@gmail.com
               </a>
             </p>
-            <h4>Education</h4>
             <p>
-              PGPWE (MBA), Indian Institute of Management, Lucknow — 2021–2023
+              <a href="tel:+918902130104" data-cursor="disable">
+                Phone: +91 8902130104
+              </a>
             </p>
-            <p>
-              B.Tech Computer Science, Manav Rachna Educational Institutions —
-              2009–2013
-            </p>
+            <p>Kolkata, India</p>
           </div>
           <div className="contact-box">
             <h4>Social</h4>
             <a
-              href="https://github.com/akashrmalhotra"
+              href="https://github.com/Dishan18/"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
@@ -40,7 +38,7 @@ const Contact = () => {
               GitHub <MdArrowOutward />
             </a>
             <a
-              href="https://www.linkedin.com/in/akashrmalhotra/"
+              href="https://www.linkedin.com/in/dishan-sarkar-819aab275/"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
@@ -49,16 +47,7 @@ const Contact = () => {
               LinkedIn <MdArrowOutward />
             </a>
             <a
-              href="https://www.youtube.com/@Leftbraincoder"
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              YouTube <MdArrowOutward />
-            </a>
-            <a
-              href="https://www.instagram.com/leftbraincoder/"
+              href="https://www.instagram.com/deesync_/"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
@@ -69,7 +58,7 @@ const Contact = () => {
           </div>
           <div className="contact-box">
             <h2>
-              Designed and Developed <br /> by <span>Akash Malhotra</span>
+              Designed and Developed <br /> by <span>Dishan Sarkar</span>
             </h2>
             <h5>
               <MdCopyright /> 2026

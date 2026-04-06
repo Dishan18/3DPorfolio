@@ -6,11 +6,12 @@ const About = () => {
       <div className="about-me">
         <h3 className="title">About Me</h3>
         <p className="para">
-          I am currently co-founder of CallHQ.ai, building real-time voice AI for
-          businesses. I am a technologist at heart with strong business judgment—
-          I enjoy going from product strategy to hands-on engineering. My background
-          spans leadership at Adobe, founding Broki and CallHQ, and shipping
-          full-stack products end to end.
+          I am Dishan Sarkar, a pre-final year B.Tech student in Artificial Intelligence and
+          Machine Learning at BIT Mesra. I build full-stack products
+          with React/Next.js and backend systems, and also work on deep learning
+          projects with TensorFlow and Keras. I enjoy combining strong computer
+          science fundamentals with practical product building, from web apps to
+          AI-powered solutions.
         </p>
       </div>
     </div>

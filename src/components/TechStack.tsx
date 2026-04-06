@@ -21,20 +21,36 @@ const imageUrls = [
   "/images/mysql.webp",
   "/images/typescript.webp",
   "/images/javascript.webp",
+  "/images/git.webp",
+  "/images/claude.webp",
+  "/images/cpp.webp",
+  "/images/cursor.webp",
+  "/images/java.webp",
+  "/images/jupyter.webp",
+  "/images/postman.webp",
+  "/images/python.webp",
+  "/images/supabase.webp",
+  "/images/tensorflow.webp",
+  "/images/keras.webp",
+  "/images/vscode.webp",
 ];
-const textures = imageUrls.map((url) => textureLoader.load(url));
+const textures = imageUrls.map((url) => {
+  const texture = textureLoader.load(url);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.generateMipmaps = false;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+  return texture;
+});
 
-const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
-
-const spheres = [...Array(30)].map(() => ({
-  scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
-}));
+const sphereGeometry = new THREE.SphereGeometry(1, 18, 18);
 
 type SphereProps = {
   vec?: THREE.Vector3;
   scale: number;
   r?: typeof THREE.MathUtils.randFloatSpread;
-  material: THREE.MeshPhysicalMaterial;
+  material: THREE.MeshStandardMaterial;
   isActive: boolean;
 };
 
@@ -57,8 +73,8 @@ function SphereGeo({
         new THREE.Vector3(
           -50 * delta * scale,
           -150 * delta * scale,
-          -50 * delta * scale
-        )
+          -50 * delta * scale,
+        ),
       );
 
     api.current?.applyImpulse(impulse, true);
@@ -105,9 +121,9 @@ function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
       new THREE.Vector3(
         (pointer.x * viewport.width) / 2,
         (pointer.y * viewport.height) / 2,
-        0
+        0,
       ),
-      0.2
+      0.2,
     );
     ref.current?.setNextKinematicTranslation(targetVec);
   });
@@ -126,52 +142,83 @@ function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
 
 const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
+  const [enableAO, setEnableAO] = useState(true);
+
+  useEffect(() => {
+    const setPerformanceMode = () => {
+      const nav = navigator as Navigator & { deviceMemory?: number };
+      const lowCores = (navigator.hardwareConcurrency || 8) <= 4;
+      const lowMemory = (nav.deviceMemory || 8) <= 4;
+      const narrowViewport = window.innerWidth < 1200;
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      setEnableAO(
+        !(lowCores || lowMemory || narrowViewport || prefersReducedMotion),
+      );
+    };
+
+    setPerformanceMode();
+    window.addEventListener("resize", setPerformanceMode);
+
+    return () => {
+      window.removeEventListener("resize", setPerformanceMode);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const threshold = document
-        .getElementById("work")!
-        .getBoundingClientRect().top;
-      setIsActive(scrollY > threshold);
+      const workSection = document.getElementById("projects");
+      if (!workSection) {
+        setIsActive(false);
+        return;
+      }
+
+      const sectionTop = workSection.getBoundingClientRect().top + scrollY;
+      const activationPoint = sectionTop - window.innerHeight * 0.6;
+      setIsActive(scrollY >= activationPoint);
     };
-    document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
-          handleScroll();
-        }, 10);
-        setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      });
-    });
-    window.addEventListener("scroll", handleScroll);
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, []);
+
+  const spheres = useMemo(() => {
+    const sphereCount = enableAO ? 16 : 8;
+    return [...Array(sphereCount)].map(() => ({
+      scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+      materialIndex: Math.floor(Math.random() * textures.length),
+    }));
+  }, [enableAO]);
+
   const materials = useMemo(() => {
     return textures.map(
       (texture) =>
-        new THREE.MeshPhysicalMaterial({
+        new THREE.MeshStandardMaterial({
           map: texture,
           emissive: "#ffffff",
-          emissiveMap: texture,
-          emissiveIntensity: 0.3,
-          metalness: 0.5,
-          roughness: 1,
-          clearcoat: 0.1,
-        })
+          emissiveMap: enableAO ? texture : null,
+          emissiveIntensity: enableAO ? 0.25 : 0.08,
+          metalness: enableAO ? 0.35 : 0.15,
+          roughness: enableAO ? 0.9 : 1,
+        }),
     );
-  }, []);
+  }, [enableAO]);
 
   return (
     <div className="techstack">
       <h2> My Techstack</h2>
 
       <Canvas
-        shadows
+        dpr={enableAO ? [1, 1.5] : [1, 1.25]}
         gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
         camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
         onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
@@ -183,17 +230,15 @@ const TechStack = () => {
           penumbra={1}
           angle={0.2}
           color="white"
-          castShadow
-          shadow-mapSize={[512, 512]}
         />
         <directionalLight position={[0, 5, -4]} intensity={2} />
-        <Physics gravity={[0, 0, 0]}>
+        <Physics gravity={[0, 0, 0]} timeStep={enableAO ? "vary" : 1 / 45}>
           <Pointer isActive={isActive} />
           {spheres.map((props, i) => (
             <SphereGeo
               key={i}
-              {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
+              scale={props.scale}
+              material={materials[props.materialIndex]}
               isActive={isActive}
             />
           ))}
@@ -203,9 +248,11 @@ const TechStack = () => {
           environmentIntensity={0.5}
           environmentRotation={[0, 4, 2]}
         />
-        <EffectComposer enableNormalPass={false}>
-          <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
-        </EffectComposer>
+        {enableAO && (
+          <EffectComposer enableNormalPass={false}>
+            <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
+          </EffectComposer>
+        )}
       </Canvas>
     </div>
   );

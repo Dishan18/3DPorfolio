@@ -1,9 +1,4 @@
-import {
-  FaGithub,
-  FaInstagram,
-  FaLinkedinIn,
-  FaYoutube,
-} from "react-icons/fa6";
+import { FaGithub, FaGlobe, FaLinkedinIn, FaPhone } from "react-icons/fa6";
 import "./styles/SocialIcons.css";
 import { TbNotes } from "react-icons/tb";
 import { useEffect } from "react";
@@ -12,16 +7,20 @@ import HoverLinks from "./HoverLinks";
 const SocialIcons = () => {
   useEffect(() => {
     const social = document.getElementById("social") as HTMLElement;
+    if (!social) return;
+
+    const cleanups: Array<() => void> = [];
 
     social.querySelectorAll("span").forEach((item) => {
       const elem = item as HTMLElement;
       const link = elem.querySelector("a") as HTMLElement;
 
-      const rect = elem.getBoundingClientRect();
+      let rect = elem.getBoundingClientRect();
       let mouseX = rect.width / 2;
       let mouseY = rect.height / 2;
       let currentX = 0;
       let currentY = 0;
+      let frame = 0;
 
       const updatePosition = () => {
         currentX += (mouseX - currentX) * 0.1;
@@ -30,7 +29,7 @@ const SocialIcons = () => {
         link.style.setProperty("--siLeft", `${currentX}px`);
         link.style.setProperty("--siTop", `${currentY}px`);
 
-        requestAnimationFrame(updatePosition);
+        frame = requestAnimationFrame(updatePosition);
       };
 
       const onMouseMove = (e: MouseEvent) => {
@@ -46,14 +45,32 @@ const SocialIcons = () => {
         }
       };
 
-      document.addEventListener("mousemove", onMouseMove);
+      const onMouseEnter = () => {
+        rect = elem.getBoundingClientRect();
+      };
+
+      const onMouseLeave = () => {
+        mouseX = rect.width / 2;
+        mouseY = rect.height / 2;
+      };
+
+      elem.addEventListener("mouseenter", onMouseEnter);
+      elem.addEventListener("mousemove", onMouseMove);
+      elem.addEventListener("mouseleave", onMouseLeave);
 
       updatePosition();
 
-      return () => {
+      cleanups.push(() => {
+        cancelAnimationFrame(frame);
+        elem.removeEventListener("mouseenter", onMouseEnter);
         elem.removeEventListener("mousemove", onMouseMove);
-      };
+        elem.removeEventListener("mouseleave", onMouseLeave);
+      });
     });
+
+    return () => {
+      cleanups.forEach((cleanup) => cleanup());
+    };
   }, []);
 
   return (
@@ -61,7 +78,7 @@ const SocialIcons = () => {
       <div className="social-icons" data-cursor="icons" id="social">
         <span>
           <a
-            href="https://github.com/akashrmalhotra"
+            href="https://github.com/Dishan18/"
             target="_blank"
             rel="noreferrer"
           >
@@ -70,7 +87,7 @@ const SocialIcons = () => {
         </span>
         <span>
           <a
-            href="https://www.linkedin.com/in/akashrmalhotra/"
+            href="https://www.linkedin.com/in/dishan-sarkar-819aab275/"
             target="_blank"
             rel="noreferrer"
           >
@@ -78,27 +95,23 @@ const SocialIcons = () => {
           </a>
         </span>
         <span>
-          <a
-            href="https://www.youtube.com/@Leftbraincoder"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <FaYoutube />
+          <a href="tel:+918902130104" target="_blank" rel="noreferrer">
+            <FaPhone />
           </a>
         </span>
         <span>
           <a
-            href="https://www.instagram.com/leftbraincoder/"
+            href="https://www.instagram.com/deesync_/"
             target="_blank"
             rel="noreferrer"
           >
-            <FaInstagram />
+            <FaGlobe />
           </a>
         </span>
       </div>
       <a
         className="resume-button"
-        href="/Akash_Malhotra.pdf"
+        href="/resumeDishanSarkar.pdf"
         target="_blank"
         rel="noreferrer"
       >

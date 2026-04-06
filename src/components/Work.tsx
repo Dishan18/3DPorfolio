@@ -5,32 +5,84 @@ import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
 const projects = [
   {
-    title: "CallHQ",
-    category: "Voice AI Calling Platform",
-    tools: "Voice AI, Calling Automation, CRM Integrations",
-    image: "/images/callhq.png",
-    link: "https://callhq.ai",
+    title: "Pinkasfloyd",
+    category: "Full-Stack E-commerce Platform",
+    tools:
+      "Next.js, React, Tailwind CSS, Supabase, SEO, Auth, Cart, Checkout, Wishlist",
+    image: "/images/pro1.png",
+    link: "https://www.pinkasfloyd.in/",
   },
   {
-    title: "Whatsapp Automation",
-    category: "WABA Application",
-    tools: "WhatsApp Business API, Workflow Automation, Notifications",
-    image: "/images/whatsapp.png",
-    link: "https://whatsapp.callhq.ai",
+    title: "Stock Price Prediction",
+    category: "Deep Learning + Sentiment Analysis",
+    tools:
+      "TensorFlow, Keras, LSTM, FinBERT, BeautifulSoup, Pandas, NumPy, Seaborn",
+    image: "/images/pro2.png",
+    link: "https://github.com/Dishan18/Stock_Predictor",
   },
   {
-    title: "Broki",
-    category: "Real Estate Platform for FnB Industry",
-    tools: "Property Discovery, Lead Management, Marketplace Workflows",
-    image: "/images/broki.png",
-    link: "https://broki.in",
+    title: "Job-Fit AI",
+    category: "AI Resume Analysis Platform",
+    tools:
+      "MERN Stack, Google Gemini, Express, Multer, JWT, Google OAuth, Tailwind",
+    image: "/images/pro3.png",
+    link: "https://github.com/Dishan18/JobFit-AI",
   },
   {
-    title: "Orrdr.com",
-    category: "Ecommerce Platform and Mobile App",
-    tools: "Ecommerce, Mobile Experience, Order Management",
-    image: "/images/orrdr.png",
-    link: "https://orrdr.com",
+    title: "Blockchain Loan Management",
+    category: "Smart Contract + Web3 System",
+    tools:
+      "Solidity, Flask, Web3.py, Truffle, Ganache, KYC, Loan States, P2P Transfers",
+    image: "/images/pro4.jpg",
+    link: "https://github.com/Dishan18/Blockchain-based-Loan-Management-System",
+  },
+  {
+    title: "3D Portfolio Website",
+    category: "Interactive Developer Portfolio",
+    tools:
+      "React, TypeScript, Vite, Three.js, React Three Fiber, GSAP, Rapier, Responsive UI",
+    image: "/images/pro5.png",
+    link: "https://github.com/Dishan18/3DPorfolio",
+  },
+  {
+    title: "AI Traffic Optimizer",
+    category: "AI Traffic: Intelligent Intersection Control System",
+    tools:
+      "Python (OpenCV, YOLOv8, NumPy, Pandas), ZeroMQ IPC, Node.js, Express, Socket.io, JWT, React, SUMO, Power BI",
+    image: "/images/pro6.jpg",
+    link: "https://github.com/Dishan18/AI-Traffic-Optimizer",
+  },
+  {
+    title: "Retail Sales and Vendor Performance Analysis",
+    category: "Data Analytics and BI Project",
+    tools:
+      "Pandas, NumPy, Seaborn, Jupyter, Power BI, SQL ETL (CTEs, filtering), EDA, Hypothesis Testing, KPI Dashboards, Inventory Optimization",
+    image: "/images/pro7.png",
+    link: "https://github.com/Dishan18/Vendor-Performance-Analysis",
+  },
+  {
+    title: "SarkarPress Web App",
+    category: "Next.js 14 + Supabase Application",
+    tools:
+      "Next.js 14 (App Router), TypeScript, Custom CSS, EN/HI/BN Localization, Supabase PostgreSQL, RLS Policies, Order ID Generation, Payment Guidance, No-Auth User Flow, Vercel Deployment",
+    image: "/images/pro8.png",
+    link: "https://github.com/Dishan18/SarkarPress",
+  },
+  {
+    title: "Therapy AI Chatbot",
+    category: "LLM-Powered Telegram Mental Wellness Assistant",
+    tools:
+      "Python, python-telegram-bot, RESTful API, LLaMA2, Contextual Memory (20-message retention), Prompt Tuning (temperature 1.0, top-p 0.9), 100+ daily conversations",
+    image: "/images/pro9.png",
+    link: "https://github.com/Dishan18/Therapy-AI-Bot",
+  },
+  {
+    title: "Olympic Data Analysis",
+    category: "Sports Data Scraping, EDA and Prediction",
+    tools:
+      "Pandas, BeautifulSoup, Matplotlib, NumPy, Jupyter, Scikit-learn, Web Scraping (olympedia.org), Data Cleaning, Statistical Analysis, Medal Prediction Logistic Regression (Accuracy: 0.8578)",
+    image: "/images/pro10.png",
+    link: "https://github.com/Dishan18/Olympic-Data-Cleaning",
   },
 ];
 
@@ -45,7 +97,7 @@ const Work = () => {
       setCurrentIndex(index);
       setTimeout(() => setIsAnimating(false), 500);
     },
-    [isAnimating]
+    [isAnimating],
   );
 
   const goToPrev = useCallback(() => {
@@ -61,10 +113,10 @@ const Work = () => {
   }, [currentIndex, goToSlide]);
 
   return (
-    <div className="work-section" id="work">
+    <div className="work-section" id="projects">
       <div className="work-container section-container">
         <h2>
-          My <span>Work</span>
+          My <span>Projects</span>
         </h2>
 
         <div className="carousel-wrapper">
@@ -99,13 +151,11 @@ const Work = () => {
                   <div className="carousel-content">
                     <div className="carousel-info">
                       <div className="carousel-number">
-                        <h3>0{index + 1}</h3>
+                        <h3>{String(index + 1).padStart(2, "0")}</h3>
                       </div>
                       <div className="carousel-details">
                         <h4>{project.title}</h4>
-                        <p className="carousel-category">
-                          {project.category}
-                        </p>
+                        <p className="carousel-category">{project.category}</p>
                         <div className="carousel-tools">
                           <span className="tools-label">Tools & Features</span>
                           <p>{project.tools}</p>
@@ -130,8 +180,9 @@ const Work = () => {
             {projects.map((_, index) => (
               <button
                 key={index}
-                className={`carousel-dot ${index === currentIndex ? "carousel-dot-active" : ""
-                  }`}
+                className={`carousel-dot ${
+                  index === currentIndex ? "carousel-dot-active" : ""
+                }`}
                 onClick={() => goToSlide(index)}
                 aria-label={`Go to project ${index + 1}`}
                 data-cursor="disable"

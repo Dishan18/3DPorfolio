@@ -1,10 +1,18 @@
-import { lazy, PropsWithChildren, Suspense, useEffect, useState } from "react";
+import {
+  lazy,
+  PropsWithChildren,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import About from "./About";
 import Career from "./Career";
 import Contact from "./Contact";
 import Cursor from "./Cursor";
 import Landing from "./Landing";
 import Navbar from "./Navbar";
+import Skills from "./Skills";
 import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
@@ -14,8 +22,10 @@ const TechStack = lazy(() => import("./TechStack"));
 
 const MainContainer = ({ children }: PropsWithChildren) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
-    window.innerWidth > 1024
+    window.innerWidth > 1024,
   );
+  const [shouldRenderTechStack, setShouldRenderTechStack] = useState(false);
+  const techStackTriggerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const resizeHandler = () => {
@@ -26,6 +36,31 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     window.addEventListener("resize", resizeHandler);
     return () => {
       window.removeEventListener("resize", resizeHandler);
+    };
+  }, [isDesktopView]);
+
+  useEffect(() => {
+    if (!isDesktopView) {
+      setShouldRenderTechStack(false);
+      return;
+    }
+
+    if (!techStackTriggerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShouldRenderTechStack(true);
+          observer.disconnect();
+        }
+      },
+      { root: null, rootMargin: "320px 0px", threshold: 0.01 },
+    );
+
+    observer.observe(techStackTriggerRef.current);
+
+    return () => {
+      observer.disconnect();
     };
   }, [isDesktopView]);
 
@@ -41,12 +76,21 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <Landing>{!isDesktopView && children}</Landing>
             <About />
             <WhatIDo />
+            <Skills />
             <Career />
             <Work />
             {isDesktopView && (
-              <Suspense fallback={<div>Loading....</div>}>
-                <TechStack />
-              </Suspense>
+              <div ref={techStackTriggerRef}>
+                {shouldRenderTechStack ? (
+                  <Suspense
+                    fallback={<div className="techstack-placeholder" />}
+                  >
+                    <TechStack />
+                  </Suspense>
+                ) : (
+                  <div className="techstack-placeholder" />
+                )}
+              </div>
             )}
             <Contact />
           </div>
