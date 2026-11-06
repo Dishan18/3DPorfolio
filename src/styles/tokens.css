@@ -1,0 +1,88 @@
+:root {
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5625rem; --text-2xl: 1.953rem; --text-3xl: 2.441rem;
+  --text-display: clamp(2.25rem, 3.2vw + 1rem, 3.5rem);
+  --text-section: clamp(2rem, 2.6vw + 1rem, 3.25rem);
+  --text-title: clamp(1.375rem, 0.8vw + 1rem, 1.75rem);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-micro: 140ms; --dur-short: 220ms; --dur-long: 420ms;
+  --container: 1240px; --gutter: 40px; --gap-columns: 40px; --section-gap-s: 112px; --section-gap: 144px; --section-gap-l: 176px;
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+
+  /* The desk */
+  --color-paper: oklch(95% 0.005 230);
+  --color-paper-2: oklch(92% 0.007 230);
+  --color-paper-3: oklch(88% 0.009 230);
+  --color-ink: oklch(22% 0.012 240);
+  --color-ink-2: oklch(38% 0.012 240);
+  --color-muted: oklch(50% 0.012 240);
+  --color-rule: oklch(84% 0.01 230);
+  --color-accent: oklch(55% 0.19 28);
+  --color-accent-ink: oklch(98% 0.005 28);
+  --color-focus: oklch(56% 0.2 28);
+  --color-error: var(--color-accent); --color-success: oklch(50% 0.12 150);
+
+  /* The cutting mat */
+  --color-mat: oklch(50% 0.085 168);
+  --color-mat-line: oklch(58% 0.08 168);
+  --color-mat-mark: oklch(78% 0.05 168);
+
+  /* Paper objects: physical, so they keep their colour in both themes */
+  --color-sheet: oklch(99% 0.003 95);
+  --color-sheet-ink: oklch(22% 0.012 240);
+  --color-sheet-ink-2: oklch(40% 0.012 240);
+  --color-sheet-rule: oklch(88% 0.008 95);
+  --color-punch: oklch(93% 0.04 92);
+  --color-punch-ink: oklch(62% 0.05 70);
+  --color-sticky: oklch(91% 0.12 100);
+  --color-kraft: oklch(80% 0.065 70);
+  --color-graph-line: oklch(87% 0.03 95);
+  --color-manila: oklch(88% 0.07 85);
+  --color-manila-tab: oklch(83% 0.08 80);
+  --color-sky: oklch(88% 0.05 235);
+  --color-sky-tab: oklch(83% 0.06 235);
+  --color-sage: oklch(89% 0.05 150);
+  --color-sage-tab: oklch(84% 0.06 150);
+  --color-slide: oklch(97% 0.002 95);
+  --color-tape-black: oklch(24% 0.01 240);
+  --color-tape-red: oklch(50% 0.17 28);
+  --color-tape-blue: oklch(46% 0.13 255);
+  --color-tape-green: oklch(46% 0.1 160);
+  --color-tape-ink: oklch(97% 0.003 95);
+  --color-index-blue: oklch(78% 0.06 240);
+  --color-index-red: oklch(66% 0.14 25);
+  --color-lanyard: oklch(55% 0.19 28);
+  --color-metal: oklch(78% 0.01 240);
+  --color-shadow: oklch(25% 0.02 240 / 0.16);
+  --color-shadow-lift: oklch(25% 0.02 240 / 0.26);
+
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-outlier: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-hand: "Caveat", "Segoe Print", cursive;
+
+  --radius-card: 6px; --radius-inner: 4px; --radius-pill: 999px; --radius-mat: 18px; --rule-hair: 1px;
+  --shadow-card: 0 1px 1px var(--color-shadow), 0 8px 18px -10px var(--color-shadow);
+  --shadow-lift: 0 2px 4px var(--color-shadow), 0 26px 40px -16px var(--color-shadow-lift);
+  --tracking-display: -0.03em;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: oklch(19% 0.01 230);
+    --color-paper-2: oklch(23% 0.011 230);
+    --color-paper-3: oklch(27% 0.012 230);
+    --color-ink: oklch(94% 0.006 230);
+    --color-ink-2: oklch(80% 0.008 230);
+    --color-muted: oklch(66% 0.01 230);
+    --color-rule: oklch(32% 0.012 230);
+    --color-accent: oklch(70% 0.16 28);
+    --color-accent-ink: oklch(18% 0.02 28);
+    --color-focus: oklch(72% 0.17 28);
+    --color-mat: oklch(36% 0.06 168);
+    --color-mat-line: oklch(43% 0.06 168);
+    --color-mat-mark: oklch(66% 0.05 168);
+    --color-shadow: oklch(5% 0.01 240 / 0.45);
+    --color-shadow-lift: oklch(5% 0.01 240 / 0.6);
+  }
+}
